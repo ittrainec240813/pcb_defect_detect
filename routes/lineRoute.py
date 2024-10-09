@@ -1,4 +1,8 @@
 import os, io
+import google.generativeai as genai
+from PIL import Image
+from dotenv import load_dotenv
+
 from fastapi import APIRouter
 from fastapi import Request,  Header, BackgroundTasks, HTTPException, status
 
@@ -6,9 +10,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage
 
-import google.generativeai as genai
-
-from PIL import Image
+load_dotenv()
 
 router = APIRouter()
 
