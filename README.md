@@ -7,3 +7,4 @@ sdk: docker
 pinned: false
 ---
 # pcb_defect_detect
+AI project
