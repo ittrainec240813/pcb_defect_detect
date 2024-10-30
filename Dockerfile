@@ -8,6 +8,8 @@ WORKDIR /
 # a cv2 issue
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
+RUN mkdir -R 777 /pcb_defect_detect/cache
+
 RUN pip install --no-cache-dir --upgrade -r /pcb_defect_detect/requirements.txt
 
 CMD ["uvicorn", "pcb_defect_detect.main:app", "--host", "0.0.0.0", "--port", "7860"]
