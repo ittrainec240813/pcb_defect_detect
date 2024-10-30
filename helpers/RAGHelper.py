@@ -41,7 +41,6 @@ class RagModel:
       model_name=EMBEDDING_MODEL_NAME,
       model_kwargs={"device": "cpu"},
       encode_kwargs={"normalize_embeddings": True},  # set True for cosine similarity
-      show_progress=True,
       cache_folder="/pcb_defect_detect/cache"
     )
 
