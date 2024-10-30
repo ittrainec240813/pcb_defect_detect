@@ -3,12 +3,13 @@ from PIL import Image
 from dotenv import load_dotenv
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from fastapi import Request,  Header, BackgroundTasks, HTTPException, status
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from typing import Optional
 
 import google.generativeai as genai
 from ultralytics import YOLO
+
+from ..helpers.RAGHelper import RagModel
 
 load_dotenv()
 
@@ -20,8 +21,14 @@ genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 chat_model = genai.GenerativeModel('gemini-1.5-flash')
 generation_config = genai.types.GenerationConfig(temperature=0.2, top_p=0.5, top_k=16)
 
+rag_model = RagModel('gemini-1.5-flash', os.environ["GOOGLE_API_KEY"])
+
 class ImageUploadBody(BaseModel):
     image: str
+
+class AskRagBody(BaseModel):
+    query: str
+    session_id: Optional[str] = "foobar-default"
 
 @router.get("/test")
 async def test():
@@ -45,7 +52,6 @@ async def chat(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            # await websocket.send_text(f"Message text was: {data}")
             try:
                 completion = chat.send_message(data, generation_config=generation_config)
                 if (completion.parts[0].text != None):
@@ -61,3 +67,8 @@ async def chat(websocket: WebSocket):
             await websocket.send_text(out)
     except WebSocketDisconnect:
         print("socket disconnected")
+
+@router.post("/rag")
+async def ask_rag(body: AskRagBody):
+    answer = rag_model.query(body.query, body.session_id)
+    return {"answer": answer}
