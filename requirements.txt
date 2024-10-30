@@ -7,3 +7,12 @@ line-bot-sdk
 google-generativeai
 pillow
 ultralytics
+langchain
+langchain-core
+langchain-community
+langchain_google_genai
+chromadb
+datasets
+transformers
+langchain_huggingface
+faiss-cpu
