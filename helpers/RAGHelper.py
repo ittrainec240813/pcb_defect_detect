@@ -10,7 +10,6 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from datasets import load_dataset
 from langchain.docstore.document import Document as LangchainDocument
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
-# from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores.utils import DistanceStrategy
 from langchain_huggingface import HuggingFaceEmbeddings
 
@@ -36,7 +35,6 @@ class RagModel:
     return self._chat_history[session_id]
   
   def _init_vector_db(self):
-    # print("Initializing vector database")
     docs_processed = self._format_docs()
     EMBEDDING_MODEL_NAME = "sentence-transformers/all-mpnet-base-v2"
     embedding_model = HuggingFaceEmbeddings(
@@ -48,13 +46,11 @@ class RagModel:
     )
 
     # 创建知识向量数据库
-    # print("return faiss")
     return FAISS.from_documents(
       docs_processed, embedding_model, distance_strategy=DistanceStrategy.COSINE
     )
     
   def _get_retriever(self):
-    # print("Getting retriever")
     vector_store = self._vector_db
     retriever = vector_store.as_retriever(search_kwargs={"k": 50})
     return retriever
