@@ -18,7 +18,7 @@ class RagModel:
     print("RAG model initializing...")
     self._llm = ChatGoogleGenerativeAI(model=model_name, top_p=1, temperature=0.001, google_api_key=google_api_key)
     self._chat_history = {}
-    self._ds = load_dataset("Luke3501/pcb_practice", split="train", token=os.environ["HF_WRITE"], cache_dir="/pcb_defect_detect/cache")
+    self._ds = load_dataset(os.environ["DATASET_PATH"], split="train", token=os.environ["HF_WRITE"], cache_dir="/pcb_defect_detect/cache")
     self._vector_db = self._init_vector_db()
     self._retriever = self._get_retriever()
     print("RAG model initialized")
